@@ -1,6 +1,6 @@
 cask "ganit" do
-  version "0.5.4"
-  sha256 "4f9eed535f70d6816f5d9fc70131f8964f30209930102b867f106e961d65460b"
+  version "0.5.5"
+  sha256 "b1d45096990ae12d333f828b4e09bc13226ac00ce26e8529c063230d0c50b7d6"
 
   url "https://github.com/shantanugoel/ganit/releases/download/v#{version}/Ganit-#{version}.dmg"
   name "Ganit"
@@ -18,6 +18,13 @@ cask "ganit" do
 
   app "Ganit.app"
   binary "#{appdir}/Ganit.app/Contents/Helpers/ganit"
+
+  uninstall quit: "com.shantanugoel.Ganit"
+
+  caveats <<~EOS
+    After upgrading, reopen Ganit to run the new version.
+    If Ganit is still running, quit it with Command-Q first.
+  EOS
 
   zap trash: [
     "~/Library/Containers/com.shantanugoel.Ganit",
