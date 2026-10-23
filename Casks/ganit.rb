@@ -1,6 +1,6 @@
 cask "ganit" do
-  version "0.7.1"
-  sha256 "89032ab87f5fc978b49bf5896d1547d2692e6396df277d9d87bc86955eb25a07"
+  version "0.7.2"
+  sha256 "2da0726480f8e74d9a6296693a42f4ceb6ee7cdc823a5e5823e5400ff87e835c"
 
   url "https://github.com/shantanugoel/ganit/releases/download/v#{version}/Ganit-#{version}.dmg"
   name "Ganit"
