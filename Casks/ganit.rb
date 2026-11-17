@@ -32,3 +32,4 @@ cask "ganit" do
     "~/Library/Saved Application State/com.shantanugoel.Ganit.savedState",
   ]
 end
+# sync test
