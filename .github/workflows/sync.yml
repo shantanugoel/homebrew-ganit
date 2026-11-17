@@ -1,0 +1,46 @@
+name: Sync the Ganit cask
+
+# This tap does not hold its own cask text. The cask of Ganit lives in
+# shantanugoel/homebrew-tap, and the release workflow of Ganit updates it
+# there. This workflow copies Casks/ganit.rb from that tap, so that existing
+# installations from this tap continue to update.
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this tap
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Copy the cask from homebrew-tap
+        run: |
+          set -euo pipefail
+          new=$(mktemp)
+          curl --fail --silent --show-error --location \
+            "https://raw.githubusercontent.com/shantanugoel/homebrew-tap/main/Casks/ganit.rb" \
+            >"$new"
+          ruby -c "$new"
+          grep -q '^cask "ganit" do$' "$new"
+          version=$(sed -n 's/^  version "\(.*\)"$/\1/p' "$new")
+          test -n "$version"
+          mkdir -p Casks
+          cp "$new" Casks/ganit.rb
+          if git diff --quiet -- Casks/ganit.rb; then
+            echo "The cask is up to date at $version."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Update Ganit to $version"
+          git push origin HEAD
